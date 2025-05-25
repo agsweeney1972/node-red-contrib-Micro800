@@ -1,0 +1,120 @@
+<script type="text/javascript">
+    // Micro800 PLC Array Node for Node-RED
+    RED.nodes.registerType('Micro800-Array', {
+        category: 'function',
+        color: '#E6E0F8',
+        defaults: {
+            name: {value:""},
+            host: {value: "", required: true},
+            arrayTag: {value: "", required: true},
+            dataType: {value: "DINT", required: true},
+            length: {value: 10, required: true},
+            action: {value: "read", required: true},
+            writeValue: {value: "", required: false}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() { return this.name || "Micro800-Array"; }
+    });
+</script>
+
+<script type="text/html" data-template-name="Micro800-Array">
+    <!-- Micro800 PLC Array Node UI -->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-host"><i class="fa fa-server"></i> Host IP</label>
+        <input type="text" id="node-input-host" placeholder="192.168.1.10">
+    </div>
+    <div class="form-row">
+        <label for="node-input-arrayTag"><i class="fa fa-list-ol"></i> Array Tag</label>
+        <input type="text" id="node-input-arrayTag" placeholder="e.g., MyArrayTag">
+    </div>
+    <div class="form-row">
+        <label for="node-input-dataType"><i class="fa fa-code-fork"></i> Data Type</label>
+        <select id="node-input-dataType" style="width: 70%;">
+            <option value="DINT">DINT</option>
+            <option value="SINT">SINT</option>
+            <option value="INT">INT</option>
+            <option value="REAL">REAL</option>
+            <option value="BOOL">BOOL</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-length"><i class="fa fa-arrows-h"></i> Array Length</label>
+        <input type="number" id="node-input-length" min="1" max="1000" placeholder="10">
+    </div>
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-exchange"></i> Action</label>
+        <select id="node-input-action" style="width: 70%;">
+            <option value="read">Read</option>
+            <option value="write">Write</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-writeValue"><i class="fa fa-pencil-square-o"></i> Write Value (JSON Array)</label>
+        <input type="text" id="node-input-writeValue" placeholder="[1,2,3,4]">
+    </div>
+</script>
+
+<script type="text/markdown" data-help-name="Micro800-Array">
+# Micro800-Array
+
+This node allows you to read or write an array tag from an Allen-Bradley Micro800 PLC using Node-Logix.
+
+## Configuration
+
+- **Host IP**: The IP address of the PLC.
+- **Array Tag**: The name of the array tag to read or write.
+- **Data Type**: The data type of the array elements (e.g., DINT, INT, REAL, BOOL).
+- **Array Length**: Number of elements to read or write.
+- **Action**: Choose "Read" or "Write".
+- **Write Value**: (For Write action) The array of values to write (JSON array).
+
+## Input
+
+You can override configuration via `msg.payload`:
+- `action`: "read" or "write"
+- `arrayTag`: Tag to use
+- `dataType`: Data type
+- `length`: Number of elements
+- `writeValue`: Array of values to write (for write action)
+
+## Output
+
+The node outputs `msg.payload` with:
+- `tag`: The base tag name
+- `value`: Array of values read or written
+- `dataType`: Data type used
+- `status`: Operation status
+
+## Example
+
+To write `[10,20,30]` to `MyArrayTag`:
+```json
+{
+  "payload": {
+    "action": "write",
+    "arrayTag": "MyArrayTag",
+    "dataType": "DINT",
+    "length": 3,
+    "writeValue": [10, 20, 30]
+  }
+}
+```
+
+To read 5 elements from `MyArrayTag`:
+```json
+{
+  "payload": {
+    "action": "read",
+    "arrayTag": "MyArrayTag",
+    "dataType": "DINT",
+    "length": 5
+  }
+}
+```
+</script>

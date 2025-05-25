@@ -1,0 +1,107 @@
+<script type="text/javascript">
+    // Micro800 PLC Node for Node-RED
+    RED.nodes.registerType('Micro800', {
+        category: 'function',
+        color: '#E6E0F8',
+        defaults: {
+            name: {value:""},
+            host: {value: "", required: true},
+            readTag: {value: "", required: false},
+            writeTag: {value: "", required: false},
+            dataType: {value: "DINT", required: false},
+            writeValue: {value: "", required: false}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() { return this.name || "Micro800"; }
+    });
+</script>
+
+<script type="text/html" data-template-name="Micro800">
+    <!-- Micro800 PLC Node UI -->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-host"><i class="fa fa-server"></i> Host IP</label>
+        <input type="text" id="node-input-host" placeholder="192.168.1.10">
+    </div>
+    <div class="form-row">
+        <label for="node-input-readTag"><i class="fa fa-arrow-down"></i> Read Tag</label>
+        <input type="text" id="node-input-readTag" placeholder="e.g., MyTag">
+    </div>
+    <div class="form-row">
+        <label for="node-input-writeTag"><i class="fa fa-arrow-up"></i> Write Tag</label>
+        <input type="text" id="node-input-writeTag" placeholder="e.g., MyTag">
+    </div>
+    <div class="form-row">
+        <label for="node-input-dataType"><i class="fa fa-code-fork"></i> Data Type</label>
+        <select id="node-input-dataType" style="width: 70%;">
+            <option value="DINT">DINT</option>
+            <option value="SINT">SINT</option>
+            <option value="INT">INT</option>
+            <option value="LINT">LINT</option>
+            <option value="REAL">REAL</option>
+            <option value="BOOL">BOOL</option>
+            <option value="STRING">STRING</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-writeValue"><i class="fa fa-pencil-square-o"></i> Write Value</label>
+        <input type="text" id="node-input-writeValue" placeholder="Value to write">
+    </div>
+    <!-- Logix Port is fixed in code, not user-editable -->
+</script>
+
+<script type="text/markdown" data-help-name="Micro800">
+# Micro800 PLC Tag Node
+
+The **Micro800** node allows you to read from or write to a single tag on an Allen-Bradley Micro800 PLC.
+
+## Configuration
+
+- **Host IP**: The IP address of the PLC.
+- **Read Tag**: The tag name to read from the PLC.
+- **Write Tag**: The tag name to write to the PLC.
+- **Data Type**: The data type of the tag (e.g., DINT, REAL, BOOL, STRING).
+- **Write Value**: (For write action) The value to write to the tag.
+
+## Input
+
+You can override configuration via `msg.payload`:
+- `action`: `"read"` or `"write"`
+- `tag`: Tag to use (overrides readTag/writeTag)
+- `value`: Value to write (for write action)
+- `dataType`: Data type
+
+## Output
+
+The node outputs `msg.payload` with:
+- `tag`: The tag name
+- `value`: Value read or written
+- `dataType`: Data type used
+- `status`: Operation status (`read-success`, `write-success`, etc.)
+
+## Example
+
+To write `123` to `MyTag`:
+```json
+{
+  "action": "write",
+  "tag": "MyTag",
+  "dataType": "DINT",
+  "value": 123
+}
+```
+
+To read from `MyTag`:
+```json
+{
+  "action": "read",
+  "tag": "MyTag",
+  "dataType": "DINT"
+}
+```
+</script>
