@@ -5,7 +5,7 @@ A Node-RED custom node package for connecting to Allen-Bradley Micro800 PLCs usi
 ---
 
 ## Features
-- Configure PLC connection parameters (host, slot, port)
+- Configure PLC connection parameters
 - Read and write single tags or arrays of tags on Allen-Bradley Micro800 PLCs
 - Supports both simple and advanced use cases
 - Built on top of the [Node-Logix](https://www.npmjs.com/package/node-logix) library
@@ -95,6 +95,17 @@ _Write an array to the PLC:_
 }
 ```
 
+![Node-RED Example](Images/InjectNodeArray.png)
+
+...
+
+![Node-RED Example](Images/NodeConfigArray.png)
+
+...
+
+![Node-RED Example](Images/ReadingStringArray.png)
+
+...
 ---
 
 ## Installation
