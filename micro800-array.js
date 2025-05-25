@@ -59,32 +59,22 @@ module.exports = function(RED) {
         node.on('input', async function(msg, send, done) {
             const action = msg.payload && msg.payload.action ? msg.payload.action : node.action;
             // Always extract the base tag (remove any [index] if present)
-            let tag = msg.payload && msg.payload.arrayTag ? msg.payload.arrayTag : node.arrayTag;
-            tag = tag.replace(/\[.*\]$/, ''); // Remove [index] if user entered it
-            // Always parse config as int, only override if valid and >0
-            let length = parseInt(node.length, 10);
-            if (isNaN(length) || length < 1) {
-                length = 1; // fallback default
-            }
-            if (
-                msg.payload &&
-                typeof msg.payload.length !== 'undefined' &&
-                !isNaN(parseInt(msg.payload.length, 10)) &&
-                parseInt(msg.payload.length, 10) > 0
-            ) {
-                length = parseInt(msg.payload.length, 10);
-            }
-            const dataType = msg.payload && msg.payload.dataType ? msg.payload.dataType : node.dataType;
-            // If the tag is a string type, force dataType to STRING
-            // This allows users to read arrays of STRING tags
-            if (dataType && typeof dataType === 'string' && dataType.trim().toUpperCase() === 'STRING') {
-                node.log('Detected STRING dataType for array operation.');
-            }
-            let valueToWrite = msg.payload && msg.payload.writeValue !== undefined ? msg.payload.writeValue : node.writeValue;
+            let tag = (msg.payload && typeof msg.payload.arrayTag === 'string' && msg.payload.arrayTag.trim() !== '')
+                ? msg.payload.arrayTag.trim()
+                : (typeof node.arrayTag === 'string' && node.arrayTag.trim() !== '' ? node.arrayTag.trim() : undefined);
+            tag = tag && typeof tag === 'string' ? tag.replace(/\[.*\]$/, '') : undefined;
+            // Allow length and dataType to be fully overridden by msg.payload
+            let length = (msg.payload && typeof msg.payload.length !== 'undefined' && !isNaN(Number(msg.payload.length)) && Number(msg.payload.length) > 0)
+                ? Number(msg.payload.length)
+                : (node.length && !isNaN(Number(node.length)) && Number(node.length) > 0 ? Number(node.length) : undefined);
+            const dataType = (msg.payload && typeof msg.payload.dataType === 'string' && msg.payload.dataType.trim() !== '')
+                ? msg.payload.dataType.trim()
+                : (typeof node.dataType === 'string' && node.dataType.trim() !== '' ? node.dataType.trim() : undefined);
+            let valueToWrite = (msg.payload && msg.payload.writeValue !== undefined) ? msg.payload.writeValue : node.writeValue;
 
-            node.log(`DEBUG: tag=${tag}, length=${length}`);
+            node.log(`DEBUG: tag=${tag}, length=${length}, dataType=${dataType}`);
 
-            if (!tag || !length || !dataType) {
+            if (typeof tag === 'undefined' || typeof length === 'undefined' || typeof dataType === 'undefined') {
                 node.status({ fill: 'red', shape: 'ring', text: 'missing config' });
                 if (done) done('Missing tag, length, or dataType');
                 return;

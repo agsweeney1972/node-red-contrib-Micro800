@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-micro800plc",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Node-RED nodes for Allen-Bradley Micro800 PLCs using Node-Logix",
   "main": "micro800.js",
   "scripts": {
