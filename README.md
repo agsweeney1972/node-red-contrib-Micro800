@@ -108,6 +108,12 @@ _Write an array to the PLC:_
 ![Node-RED Example](Images/ReadingStringArray.png)
 
 ...
+
+---
+
+![Node-RED Example](Images/Node-RedFlows_Generic.png)
+
+
 ---
 
 ## Installation
