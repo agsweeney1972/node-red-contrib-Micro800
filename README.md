@@ -95,6 +95,8 @@ _Write an array to the PLC:_
 }
 ```
 
+...
+
 ![Node-RED Example](Images/InjectNodeArray.png)
 
 ...
