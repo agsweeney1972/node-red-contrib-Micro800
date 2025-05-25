@@ -6,10 +6,10 @@
         defaults: {
             name: {value:""},
             host: {value: "", required: true},
-            arrayTag: {value: "", required: true},
-            dataType: {value: "DINT", required: true},
-            length: {value: 10, required: true},
-            action: {value: "read", required: true},
+            arrayTag: {value: "", required: false},
+            dataType: {value: "DINT", required: false},
+            length: {value: 1, required: false},
+            action: {value: "read", required: false},
             writeValue: {value: "", required: false}
         },
         inputs:1,
@@ -39,8 +39,10 @@
             <option value="DINT">DINT</option>
             <option value="SINT">SINT</option>
             <option value="INT">INT</option>
+            <option value="LINT">LINT</option>
             <option value="REAL">REAL</option>
             <option value="BOOL">BOOL</option>
+            <option value="STRING">STRING</option>
         </select>
     </div>
     <div class="form-row">
